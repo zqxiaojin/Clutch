@@ -58,6 +58,19 @@ void listApps() {
         [[ClutchPrint sharedInstance] printColor:color format:@"%d: %@%@ <%@>", count, space, _app.displayName, _app.bundleIdentifier];
     }
 }
+unsigned int getValueUnsignedInt(NSObject* obj);
+
+unsigned int getValueUnsignedInt(NSObject* obj)
+{
+    if ([obj respondsToSelector:@selector(unsignedIntValue)]){
+        NSNumber* number = (NSNumber*)obj;
+        return [number unsignedIntValue];
+    } else {
+        NSLog(@"%@", [obj class]);
+        NSString* str = (NSString*)obj;
+        return (unsigned int)[str intValue];
+    }
+}
 
 int main (int argc, const char * argv[])
 {
@@ -130,22 +143,22 @@ int main (int argc, const char * argv[])
                     case ClutchCommandOptionFrameworkDump:
                     {
                         NSArray *args = [NSProcessInfo processInfo].arguments;
-                        
+                        NSLog(@"%@", args);
                         if (([args[1] isEqualToString:@"--fmwk-dump"] || [args[1] isEqualToString:@"-f"]) && (args.count == 13))
                         {
                             FrameworkLoader *fmwk = [FrameworkLoader new];
                             
                             fmwk.binPath = args[2];
                             fmwk.dumpPath = args[3];
-                            fmwk.pages = [args[4] unsignedIntValue];
-                            fmwk.ncmds = [args[5] unsignedIntValue];
-                            fmwk.offset = [args[6] unsignedIntValue];
+                            fmwk.pages = getValueUnsignedInt(args[4]);//[args[4] unsignedIntValue];
+                            fmwk.ncmds = getValueUnsignedInt(args[5]);//[args[5] unsignedIntValue];
+                            fmwk.offset = getValueUnsignedInt(args[6]);//[args[6] unsignedIntValue];
                             fmwk.bID = args[7];
-                            fmwk.hashOffset = [args[8] unsignedIntValue];
-                            fmwk.codesign_begin = [args[9] unsignedIntValue];
-                            fmwk.cryptsize = [args[10] unsignedIntValue];
-                            fmwk.cryptoff = [args[11] unsignedIntValue];
-                            fmwk.cryptlc_offset = [args[12] unsignedIntValue];
+                            fmwk.hashOffset = getValueUnsignedInt(args[8]);//[args[8] unsignedIntValue];
+                            fmwk.codesign_begin = getValueUnsignedInt(args[9]);//[args[9] unsignedIntValue];
+                            fmwk.cryptsize = getValueUnsignedInt(args[10]);//[args[10] unsignedIntValue];
+                            fmwk.cryptoff = getValueUnsignedInt(args[11]);//[args[11] unsignedIntValue];
+                            fmwk.cryptlc_offset = getValueUnsignedInt(args[12]);//[args[12] unsignedIntValue];
                             fmwk.dumpSize = fmwk.cryptoff + fmwk.cryptsize;
                             
                             
